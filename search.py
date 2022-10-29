@@ -16,3 +16,6 @@ for root, dirs, files in os.walk(root_dir):
         if name.endswith(tuple(ft for ft in file_types)) or not file_types:
             if not fuzzy_search or fuzz.token_sort_ratio(fuzzy_search.lower(), name.lower()) > p_f:
                 print (root + os.sep + name)
+
+if __name__=="__main__":
+    pass
