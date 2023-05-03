@@ -3,16 +3,21 @@ from fuzzywuzzy import fuzz
 
 root_dir = input("Enter the root directory for your search: ")
 
+if not os.path.exists(root_dir):
+    print("[ ERROR ] the path is not found")
+    exit(0)
+
 file_types = input("Enter the file endings to look for (Separate by spaces) (Empty = ALL): ")
-fuzzy_search= input("Enter a search query (Empty = None): ")
-if fuzzy_search:
+search_query= input("Enter a search query (Empty = None): ")
+if search_query:
     p_f = int(input("Percentage of search query matching : "))
     
 
-file_types = file_types.split()
+file_types = tuple(f for f in file_types.split())
 
-for root, dirs, files in os.walk(root_dir):
+print()
+for _, dirs, files in os.walk(root_dir):
     for name in files:
-        if name.endswith(tuple(ft for ft in file_types)) or not file_types:
-            if not fuzzy_search or fuzz.token_sort_ratio(fuzzy_search.lower(), name.lower()) > p_f:
-                print (root + os.sep + name)
+        if not file_types or name.endswith(file_types):
+            if not search_query or fuzz.token_sort_ratio(search_query.lower(), name.lower()) > p_f:
+                print(root_dir + os.sep + name)
